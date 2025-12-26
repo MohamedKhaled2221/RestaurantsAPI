@@ -22,6 +22,7 @@ namespace Restaurants.Application.Restaurants.Dtos
 
         public List<DishDto> Dishes { get; set; } = [];
 
+
        
     }
 }
