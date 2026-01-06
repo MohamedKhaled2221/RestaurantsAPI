@@ -1,14 +1,11 @@
-using System.Threading.Tasks;
+using Restaurants.API.Middlewares;
+using Restaurants.Application.Extensions;
 using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
-using Restaurants.Application.Extensions;
 using Serilog;
-using Serilog.Events;
-using Restaurants.API.Middlewares;
-using Microsoft.OpenApi;
 
 namespace Restaurants.API
-   
+
 {
     public class Program
     {
@@ -21,11 +18,12 @@ namespace Restaurants.API
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-          
-            builder.Services.AddScoped<ErrorHandlingMiddle>();
+
+            builder.Services.AddScoped<ErrorHandlingMiddleware>();
+            builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
-            builder.Host.UseSerilog((context,Configuration) =>
+            builder.Host.UseSerilog((context, Configuration) =>
                Configuration.ReadFrom.Configuration(context.Configuration)
 
                 );
@@ -34,11 +32,13 @@ namespace Restaurants.API
             var app = builder.Build();
 
             var scope = app.Services.CreateScope();
-          var seeder=  scope.ServiceProvider.GetRequiredService<IRestaurantSeeder>();
+            var seeder = scope.ServiceProvider.GetRequiredService<IRestaurantSeeder>();
             await seeder.Seed();
-            app.UseSerilogRequestLogging();
-            app.UseMiddleware<ErrorHandlingMiddle>();
+  
             // Configure the HTTP request pipeline.
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<RequestTimeLoggingMiddleware>();
+            app.UseSerilogRequestLogging();
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
