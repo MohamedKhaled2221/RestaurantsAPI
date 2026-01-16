@@ -18,19 +18,10 @@ namespace Restaurants.Infrastructure.Repositories
             return entity.Id;
         }
 
-        public Task Delete(Dish entity)
+        public async Task Delete(IEnumerable<Dish> dishes)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Dish?> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SaveChanges()
-        {
-            throw new NotImplementedException();
+          dbContext.Dishes.RemoveRange(dishes);
+           await dbContext.SaveChangesAsync();
         }
     }
 }
