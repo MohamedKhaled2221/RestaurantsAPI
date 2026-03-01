@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -8,12 +9,14 @@ using Restaurants.Application.Dishes.Commands.GetDishByIdForResturant;
 using Restaurants.Application.Dishes.Dtos;
 using Restaurants.Application.Dishes.Queries.GetDishesForRestaurant;
 using Restaurants.Domain.Entities;
+using Restaurants.Infrastructure.Authorization;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace Restaurants.API.Controllers
 {
     [Route("api/restaurants/{restaurantId}/dishes")]
     [ApiController]
+    [Authorize]
     public class DishesController(IMediator mediator) : ControllerBase
     {
         [HttpPost]
@@ -25,6 +28,7 @@ namespace Restaurants.API.Controllers
 
         }
         [HttpGet]
+        [Authorize(Policy = PolicyNames.AtLeast20)]
         public async  Task<ActionResult<IEnumerable<DishDto>>> GetAllForRestaurant([FromRoute] int restaurantId)
         {
         var dishes =  await mediator.Send(new GetDishesForResturantQuery(restaurantId));

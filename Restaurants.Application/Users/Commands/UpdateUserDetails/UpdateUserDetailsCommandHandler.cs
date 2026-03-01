@@ -25,7 +25,9 @@ namespace Restaurants.Application.Users.Commands.UpdateUserDetails
                 throw new NotFoundException(nameof(User), user!.Id);
 
             dbUser.Nationality = request.Nationality;
-            dbUser.DateOfBirth = request.DataofBirth;
+
+            // convert DateOnly? to DateTime? for the User.DateOfBirth (DateTime?)
+            dbUser.DateOfBirth = request.DataofBirth?.ToDateTime(TimeOnly.MinValue);
 
             await userstore.UpdateAsync(dbUser, cancellationToken);
         }

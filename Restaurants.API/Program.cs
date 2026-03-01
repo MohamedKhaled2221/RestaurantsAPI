@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Restaurants.API.Extensions;
 using Restaurants.API.Middlewares;
@@ -21,7 +22,7 @@ namespace Restaurants.API
             builder.AddPresentation();
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
-            
+
 
 
             var app = builder.Build();
@@ -51,8 +52,11 @@ namespace Restaurants.API
             app.UseAuthorization();
 
             app.MapControllers();
+           
+
 
             app.Run();
+
         }
     }
 }
