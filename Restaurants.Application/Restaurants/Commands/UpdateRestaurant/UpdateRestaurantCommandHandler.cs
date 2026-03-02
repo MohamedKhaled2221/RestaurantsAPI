@@ -9,11 +9,14 @@ using Microsoft.Extensions.Logging;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Exceptions;
 using Restaurants.Domain.Repositories;
+using Restaurants.Infrastructure.Authorization;
+using Restaurants.Infrastructure.Authorization.Services;
 
 namespace Restaurants.Application.Restaurants.Commands.UpdateRestaurant
 {
     public class UpdateRestaurantCommandHandler(ILogger<UpdateRestaurantCommandHandler> logger, IMapper mapper,
-        IRestaurantsRepository restaurantsRepository) : IRequestHandler<UpdateRestaurantCommand>
+        IRestaurantsRepository restaurantsRepository,
+        IRestaurantAuthorizationService restaurantAuthorizationService) : IRequestHandler<UpdateRestaurantCommand>
     {
         public async Task Handle(UpdateRestaurantCommand request, CancellationToken cancellationToken)
         {
@@ -22,6 +25,9 @@ namespace Restaurants.Application.Restaurants.Commands.UpdateRestaurant
 
             if (restaurant is null)
                 throw new NotFoundException(nameof(Restaurant), request.Id.ToString());
+
+            if (!restaurantAuthorizationService.Authorize(restaurant, ResourceOperation.Update))
+                throw new ForbidException();
             mapper.Map(request, restaurant);
            
 

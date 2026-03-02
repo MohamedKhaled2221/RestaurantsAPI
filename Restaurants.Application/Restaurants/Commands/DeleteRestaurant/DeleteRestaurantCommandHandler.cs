@@ -8,11 +8,14 @@ using Microsoft.Extensions.Logging;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Exceptions;
 using Restaurants.Domain.Repositories;
+using Restaurants.Infrastructure.Authorization;
+using Restaurants.Infrastructure.Authorization.Services;
 
 namespace Restaurants.Application.Restaurants.Commands.DeleteRestaurant
 {
     public class DeleteRestaurantCommandHandler(ILogger<DeleteRestaurantCommandHandler> logger
-        , IRestaurantsRepository restaurantsRepository ) : IRequestHandler<DeleteRestaurantCommand>
+        , IRestaurantsRepository restaurantsRepository,
+        IRestaurantAuthorizationService restaurantAuthorizationService) : IRequestHandler<DeleteRestaurantCommand>
     {
         public async Task Handle(DeleteRestaurantCommand request, CancellationToken cancellationToken)
         {
@@ -21,7 +24,10 @@ namespace Restaurants.Application.Restaurants.Commands.DeleteRestaurant
             if (restaurant == null)
             throw new NotFoundException(nameof(Restaurant),request.Id.ToString());
 
-           await restaurantsRepository.Delete(restaurant);
+            if(! restaurantAuthorizationService.Authorize(restaurant,ResourceOperation.Delete))
+                throw new ForbidException();
+
+            await restaurantsRepository.Delete(restaurant);
          
         }
     }

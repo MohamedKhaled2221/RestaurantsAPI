@@ -19,6 +19,11 @@ namespace Restaurants.API.Middlewares
                 logger.LogWarning(notfound.Message);
 
             }
+            catch (ForbidException)
+            {
+                context.Response.StatusCode = 403;
+                await context.Response.WriteAsync("You don't have permission to access this resource.");
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);
