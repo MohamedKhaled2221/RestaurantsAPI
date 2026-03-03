@@ -39,7 +39,9 @@ namespace Restaurants.Infrastructure.Extensions
             services.AddScoped<IDishesRepository, DishesRepository>();
             services.AddAuthorizationBuilder()
              .AddPolicy(PolicyNames.HasNationality, policy => policy.RequireClaim( AppClaimTypes.Nationality, "German", "Polish"))
-              .AddPolicy(PolicyNames.AtLeast20, policy => policy.AddRequirements(new MinimumAgeRequirement(20)));
+              .AddPolicy(PolicyNames.AtLeast20, policy => policy.AddRequirements(new MinimumAgeRequirement(20)))
+                .AddPolicy(PolicyNames.CreatedAtleast2Restaurants,
+                policy => policy.AddRequirements(new CreatedMultipleRestaurantsRequirement(2)));
             services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
             services.AddScoped<IRestaurantAuthorizationService,RestaurantAuthorizationService >();
         }
