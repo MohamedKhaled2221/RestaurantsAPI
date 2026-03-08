@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Restaurants.Application.Common;
 using Restaurants.Application.Constants;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Repositories;
@@ -56,6 +57,7 @@ namespace Restaurants.Infrastructure.Repositories
                 baseQuery = sortDirection == SortDirection.Ascending
                     ? baseQuery.OrderBy(selectedColumn)
                     : baseQuery.OrderByDescending(selectedColumn);
+
             }
 
             var restaurants = await baseQuery

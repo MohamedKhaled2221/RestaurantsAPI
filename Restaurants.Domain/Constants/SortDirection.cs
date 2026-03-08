@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurants.Application.Constants
+namespace Restaurants.Application.Common
 {
     public enum SortDirection
     {
         Ascending,
         Descending
+
 
     }
 }

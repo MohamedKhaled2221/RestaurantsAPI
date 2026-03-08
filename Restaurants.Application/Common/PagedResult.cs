@@ -19,6 +19,7 @@ namespace Restaurants.Application.Common
 
         public IEnumerable<T> Items { get; set; }
         public int TotalPages { get; set; }
+
         public int TotalItemCount { get; set; }
         public int ItemsFrom { get; set; }
         public int ItemsTo { get; set; }
