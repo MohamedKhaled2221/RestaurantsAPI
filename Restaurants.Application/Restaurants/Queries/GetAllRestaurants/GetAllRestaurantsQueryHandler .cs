@@ -19,7 +19,7 @@ namespace Restaurants.Application.Restaurants.Queries.GetAllRestaurants
         {
             logger.LogInformation("Getting All Restaurants");
             var (restaurants,totalcount) = await restaurantsRepository.GetAllMatchingAsync(request.SearcchPhrase!,
-                request.PageSize,request.PageNumber);
+                request.PageSize,request.PageNumber,request.SortBy,request.SortDirection);
     
             var restaurantsDtos = mapper.Map<IEnumerable<RestaurantDto>>(restaurants);
             var result = new PagedResult<RestaurantDto>(restaurantsDtos, totalcount, request.PageSize, request.PageNumber);
