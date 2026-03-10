@@ -17,7 +17,7 @@ namespace Restaurants.Application.Users
     {
         public CurrentUser GetCurrentUser()
         {
-            var user = httpContextAccessor.HttpContext?.User;
+            var user = httpContextAccessor?.HttpContext?.User;
             if (user is null)
             {
                 throw new InvalidOperationException("No HttpContext or User available");
