@@ -23,8 +23,10 @@ namespace Restaurants.Application.Restaurants.Commands.CreateRestaurant
                 ,currentUser.Email
                 ,currentUser.Id
                 , request);
+
             var restaurant = mapper.Map<Restaurant>(request);
             restaurant.OwnerId = currentUser.Id;
+
             int id = await restaurantsRepository.Create(restaurant);
             return id;
         }
