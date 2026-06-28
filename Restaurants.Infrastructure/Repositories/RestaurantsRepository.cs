@@ -8,6 +8,8 @@ using Restaurants.Domain.Entities;
 using Restaurants.Domain.Repositories;
 using Restaurants.Infrastructure.Persistence;
 using Restaurants.Application.Common;
+using System.Linq.Expressions;
+using Restaurants.Application.Restaurants.Dtos;
 
 namespace Restaurants.Infrastructure.Repositories
 {
